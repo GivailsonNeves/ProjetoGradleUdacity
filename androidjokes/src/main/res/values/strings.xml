@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">androidJokes</string>
+    <string name="piada_da_vez">Piada da vez</string>
+    <string name="erro_no_joke">Erro - Não há parametros na requisição!!</string>
+    <string name="erro_no_joke_data">Erro - Piada não recebida!</string>
+    <string name="joke_param">joke</string>
 </resources>

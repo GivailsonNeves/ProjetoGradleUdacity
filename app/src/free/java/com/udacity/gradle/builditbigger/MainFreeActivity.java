@@ -10,12 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.tasks.EndpointsAsyncTask;
 
 import br.com.givailson.androidjokes.AndroidJokeActivity;
 
 
-public class MainActivity extends AppCompatActivity implements EndpointsAsyncTask.OnEndPointCallBack {
+public class MainFreeActivity extends AppCompatActivity implements EndpointsAsyncTask.OnEndPointCallBack {
 
     private View formContent;
     private View loaderContent;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_free_main);
         prepareView();
     }
 
