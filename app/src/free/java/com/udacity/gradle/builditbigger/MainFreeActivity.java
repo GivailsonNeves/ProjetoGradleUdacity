@@ -62,17 +62,6 @@ public class MainFreeActivity extends AppCompatActivity implements EndpointsAsyn
                 .execute(new Pair<Context, EndpointsAsyncTask.OnEndPointCallBack>(this, this));
     }
 
-    @Override
-    public void onEndPointBack(String response) {
-        showJokeView(response);
-    }
-
-    @Override
-    public void onEndPointError(String error) {
-        showError(error);
-        hideLoader();
-    }
-
     private void showError(String error) {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
@@ -94,5 +83,16 @@ public class MainFreeActivity extends AppCompatActivity implements EndpointsAsyn
         hideLoader();
     }
 
+
+    @Override
+    public void onEndPointBack(EndpointsAsyncTask.DataReturn response) {
+
+        if (response.result) {
+            showJokeView(response.data);
+        } else {
+            hideLoader();
+           showError(response.data);
+        }
+    }
 
 }

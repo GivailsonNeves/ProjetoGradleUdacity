@@ -13,7 +13,7 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
 
-public class EndpointsAsyncTask extends AsyncTask<Pair<Context, EndpointsAsyncTask.OnEndPointCallBack>, Void, String> {
+public class EndpointsAsyncTask extends AsyncTask<Pair<Context, EndpointsAsyncTask.OnEndPointCallBack>, Void, EndpointsAsyncTask.DataReturn> {
 
     private static MyApi myApiService = null;
     private Context context;
@@ -21,7 +21,7 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, EndpointsAsyncTa
 
 
     @Override
-    protected String doInBackground(Pair<Context, OnEndPointCallBack>... params) {
+    protected DataReturn doInBackground(Pair<Context, OnEndPointCallBack>... params) {
         if(myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -39,24 +39,31 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, EndpointsAsyncTa
         context = params[0].first;
         callBack = params[0].second;
 
-        try {
-            return myApiService.getJoke().execute().getData();
-        } catch (IOException e) {
-            if (this.callBack != null)
-                this.callBack.onEndPointError(e.getMessage());
+        DataReturn dataReturn = new DataReturn();
 
-            return e.getMessage();
+        try {
+            dataReturn.data = myApiService.getJoke().execute().getData();
+            dataReturn.result = true;
+        } catch (IOException e) {
+
+            dataReturn.data = e.getMessage();
+            dataReturn.result = false;
         }
+        return dataReturn;
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(DataReturn result) {
         if(this.callBack != null)
             this.callBack.onEndPointBack(result);
     }
 
     public interface OnEndPointCallBack {
-        void onEndPointBack(String response);
-        void onEndPointError(String error);
+        void onEndPointBack(DataReturn response);
+    }
+
+    public class DataReturn {
+        public String data;
+        public Boolean result;
     }
 }
