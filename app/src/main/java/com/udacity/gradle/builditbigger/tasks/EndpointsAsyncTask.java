@@ -36,15 +36,19 @@ public class EndpointsAsyncTask extends AsyncTask<EndpointsAsyncTask.OnEndPointC
 
         callBack = params[0];
 
+        DataReturn dataReturn = new DataReturn();
+
         try {
-            return myApiService.getJoke().execute().getData();
+            dataReturn.data = myApiService.getJoke().execute().getData();
+            dataReturn.result = true;
         } catch (IOException e) {
             return  null;
         }
+        return dataReturn;
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(DataReturn result) {
         if(this.callBack != null)
             this.callBack.onEndPointBack(result);
     }

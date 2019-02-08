@@ -92,4 +92,14 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
     }
 
 
+    @Override
+    public void onEndPointBack(EndpointsAsyncTask.DataReturn response) {
+
+        if (response.result) {
+            showJokeView(response.data);
+        } else {
+            hideLoader();
+            showError(response.data);
+        }
+    }
 }
