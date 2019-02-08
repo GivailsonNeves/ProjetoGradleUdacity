@@ -59,18 +59,12 @@ public class MainFreeActivity extends AppCompatActivity implements EndpointsAsyn
     public void tellJoke(View view) {
         showLoader();
         new EndpointsAsyncTask()
-                .execute(new Pair<Context, EndpointsAsyncTask.OnEndPointCallBack>(this, this));
+                .execute(this);
     }
 
     @Override
     public void onEndPointBack(String response) {
         showJokeView(response);
-    }
-
-    @Override
-    public void onEndPointError(String error) {
-        showError(error);
-        hideLoader();
     }
 
     private void showError(String error) {
@@ -88,10 +82,14 @@ public class MainFreeActivity extends AppCompatActivity implements EndpointsAsyn
     }
 
     private void showJokeView(String response) {
-        Intent intent = new Intent(this, AndroidJokeActivity.class);
-        intent.putExtra(getString(R.string.joke_param), response);
-        startActivity(intent);
         hideLoader();
+        if (response != null) {
+            Intent intent = new Intent(this, AndroidJokeActivity.class);
+            intent.putExtra(getString(R.string.joke_param), response);
+            startActivity(intent);
+        } else {
+            showError("Verifique se o servidor está conectado!");
+        }
     }
 
 

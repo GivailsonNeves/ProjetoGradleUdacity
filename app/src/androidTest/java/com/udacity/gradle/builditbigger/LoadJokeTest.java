@@ -27,7 +27,7 @@ public class LoadJokeTest {
             @Override
             public void onLoadCallBack(String response) {
 
-                assertTrue(!response.isEmpty());
+                assertTrue(response!= null && !response.isEmpty());
 
             }
         });

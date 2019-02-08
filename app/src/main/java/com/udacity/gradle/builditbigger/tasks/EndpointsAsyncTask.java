@@ -1,9 +1,6 @@
 package com.udacity.gradle.builditbigger.tasks;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Pair;
-import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -13,15 +10,16 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
 
-public class EndpointsAsyncTask extends AsyncTask<Pair<Context, EndpointsAsyncTask.OnEndPointCallBack>, Void, String> {
+public class EndpointsAsyncTask extends AsyncTask<EndpointsAsyncTask.OnEndPointCallBack, Void, String> {
 
     private static MyApi myApiService = null;
-    private Context context;
     private OnEndPointCallBack callBack;
 
 
+
     @Override
-    protected String doInBackground(Pair<Context, OnEndPointCallBack>... params) {
+    protected String doInBackground(OnEndPointCallBack... params) {
+
         if(myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -36,16 +34,12 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, EndpointsAsyncTa
             myApiService = builder.build();
         }
 
-        context = params[0].first;
-        callBack = params[0].second;
+        callBack = params[0];
 
         try {
             return myApiService.getJoke().execute().getData();
         } catch (IOException e) {
-            if (this.callBack != null)
-                this.callBack.onEndPointError(e.getMessage());
-
-            return e.getMessage();
+            return  null;
         }
     }
 
@@ -57,6 +51,5 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, EndpointsAsyncTa
 
     public interface OnEndPointCallBack {
         void onEndPointBack(String response);
-        void onEndPointError(String error);
     }
 }
