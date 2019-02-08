@@ -61,11 +61,6 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
                 .execute(this);
     }
 
-    @Override
-    public void onEndPointBack(String response) {
-        showJokeView(response);
-    }
-
     private void showError(String error) {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
@@ -93,13 +88,13 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
 
 
     @Override
-    public void onEndPointBack(EndpointsAsyncTask.DataReturn response) {
+    public void onEndPointBack(String response) {
 
-        if (response.result) {
-            showJokeView(response.data);
+        if (response != null) {
+            showJokeView(response);
         } else {
             hideLoader();
-            showError(response.data);
+            showError("Confira se o servidor está ligado!");
         }
     }
 }
