@@ -15,11 +15,8 @@ public class MainTestActivity extends MainActivity {
     }
 
     @Override
-    public void onEndPointBack(EndpointsAsyncTask.DataReturn response) {
+    public void onEndPointBack(String response) {
         super.onEndPointBack(response);
-        if (response.result)
-            loadCallBack.onLoadCallBack(response.data);
-        else
-            loadCallBack.onLoadCallBack(null);
+        loadCallBack.onLoadCallBack(response);
     }
 }

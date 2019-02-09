@@ -3,33 +3,39 @@ package com.udacity.gradle.builditbigger;
 import com.udacity.gradle.builditbigger.tasks.EndpointsAsyncTask;
 
 import static org.junit.Assert.*;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowLooper;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
+@RunWith(RobolectricTestRunner.class)
 public class LoadJokeUnitTest {
 
-    final CompletableFuture<String> future = new CompletableFuture<>();
+    @Before
+    public void setUp() {
+        Robolectric.getBackgroundThreadScheduler().pause();
+        Robolectric.getForegroundThreadScheduler().pause();
+    }
 
     @Test
-    public void testAsyncLoad() throws ExecutionException, InterruptedException {
+    public void testAsyncLoad() {
 
 
+        //Robolectric.flushBackgroundThreadScheduler();
+        new EndpointsAsyncTask()
+                .execute(new EndpointsAsyncTask.OnEndPointCallBack() {
+            @Override
+            public void onEndPointBack(String response) {
+                assertNotNull(response);
+            }
+        });
+        Robolectric.flushBackgroundThreadScheduler();
 
-        final EndpointsAsyncTask endPoint = new EndpointsAsyncTask();
-
-        endPoint.execute(
-                new EndpointsAsyncTask.OnEndPointCallBack() {
-                    @Override
-                    public void onEndPointBack(String response) {
-
-                        future.complete(response);
-
-                    }
-                });
-
-      assertNotNull(future.get());
-
+        //ShadowLooper.runUiThreadTasks();
     }
 }
+
+
